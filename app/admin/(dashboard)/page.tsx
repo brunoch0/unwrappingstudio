@@ -1,11 +1,13 @@
 import Link from "next/link";
 import { createServerSupabase } from "@/lib/supabase/server";
-import { getCurrentAdmin, ROLE_LABEL } from "@/lib/admin";
+import { getCurrentAdmin } from "@/lib/admin";
+import { getAdminT } from "@/lib/admin-i18n-server";
 
 export const dynamic = "force-dynamic";
 
 export default async function AdminDashboard() {
   const admin = await getCurrentAdmin();
+  const { t } = await getAdminT();
   const supabase = await createServerSupabase();
   const head = { count: "exact" as const, head: true };
   const [products, live, collections, inquiries] = await Promise.all([
@@ -16,18 +18,18 @@ export default async function AdminDashboard() {
   ]);
 
   const cards = [
-    { label: "Products", value: products, sub: `${live} live`, href: "/admin/products" },
-    { label: "Collections", value: collections, href: "/admin/collections" },
-    { label: "Inquiries", value: inquiries, sub: "leads", href: "/admin/inquiries" },
+    { label: t("dash.products"), value: products, sub: `${live} ${t("dash.live")}`, href: "/admin/products" },
+    { label: t("dash.collections"), value: collections, href: "/admin/collections" },
+    { label: t("dash.inquiries"), value: inquiries, sub: t("dash.leads"), href: "/admin/inquiries" },
   ];
 
   return (
     <div>
       <h1 className="text-[26px] font-bold tracking-[var(--ls-display)] text-[var(--text-strong)]">
-        Welcome{admin ? `, ${admin.email.split("@")[0]}` : ""}
+        {t("dash.welcome")}{admin ? `, ${admin.email.split("@")[0]}` : ""}
       </h1>
       <p className="mt-1.5 text-[14px] text-[var(--text-muted)]">
-        Signed in as {admin ? ROLE_LABEL[admin.role] : ""}.
+        {t("dash.signedAs")}: {admin ? t(`role.${admin.role}`) : ""}
       </p>
 
       <div className="mt-8 grid gap-4 sm:grid-cols-3">
@@ -54,13 +56,13 @@ export default async function AdminDashboard() {
 
       <div className="mt-8 flex flex-wrap gap-3">
         <Link href="/admin/products/new" className="us-btn us-btn--md us-btn--primary">
-          New product
+          {t("dash.newProduct")}
         </Link>
         <Link href="/admin/collections/new" className="us-btn us-btn--md us-btn--secondary">
-          New collection
+          {t("dash.newCollection")}
         </Link>
         <Link href="/shop" className="us-btn us-btn--md us-btn--ghost">
-          View storefront →
+          {t("dash.viewStore")}
         </Link>
       </div>
     </div>

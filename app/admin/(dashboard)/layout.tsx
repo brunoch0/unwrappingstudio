@@ -1,9 +1,11 @@
 import { redirect } from "next/navigation";
 import Link from "next/link";
-import { getCurrentAdmin, ROLE_LABEL, isSuperAdmin } from "@/lib/admin";
+import { getCurrentAdmin, isSuperAdmin } from "@/lib/admin";
+import { getAdminT } from "@/lib/admin-i18n-server";
 import { Logo } from "@/components/Logo";
 import { LogoutButton } from "@/components/admin/LogoutButton";
 import { AdminNav } from "@/components/admin/AdminNav";
+import { LangToggle } from "@/components/admin/LangToggle";
 
 export default async function AdminLayout({
   children,
@@ -12,6 +14,7 @@ export default async function AdminLayout({
 }) {
   const admin = await getCurrentAdmin();
   if (!admin) redirect("/admin/login");
+  const { lang, t } = await getAdminT();
 
   return (
     <div className="min-h-screen bg-[var(--surface-raised)]">
@@ -21,19 +24,20 @@ export default async function AdminLayout({
             <Logo tone="key" size={18} />
           </Link>
           <span className="rounded-[var(--radius-pill)] bg-[var(--us-key-tint)] px-2.5 py-0.5 text-[11px] font-semibold uppercase tracking-[var(--ls-label)] text-[var(--us-key)]">
-            Admin
+            {t("auth.admin")}
           </span>
-          <AdminNav isSuper={isSuperAdmin(admin.role)} />
+          <AdminNav isSuper={isSuperAdmin(admin.role)} lang={lang} />
           <div className="ml-auto flex items-center gap-3">
+            <LangToggle lang={lang} />
             <div className="hidden text-right sm:block">
               <div className="text-[12px] font-medium text-[var(--text-strong)]">
                 {admin.email}
               </div>
               <div className="text-[11px] text-[var(--text-muted)]">
-                {ROLE_LABEL[admin.role]}
+                {t(`role.${admin.role}`)}
               </div>
             </div>
-            <LogoutButton />
+            <LogoutButton lang={lang} />
           </div>
         </div>
       </header>

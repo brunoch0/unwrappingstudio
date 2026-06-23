@@ -1,9 +1,10 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { createBrowserSupabase } from "@/lib/supabase/client";
 import { Logo } from "@/components/Logo";
+import { translate, type AdminLang, ADMIN_LANG_COOKIE } from "@/lib/admin-i18n";
 
 export default function AdminLoginPage() {
   const router = useRouter();
@@ -12,6 +13,12 @@ export default function AdminLoginPage() {
   const [password, setPassword] = useState("");
   const [busy, setBusy] = useState(false);
   const [msg, setMsg] = useState<string | null>(null);
+  const [lang, setLang] = useState<AdminLang>("ko");
+  useEffect(() => {
+    const m = document.cookie.match(new RegExp(`${ADMIN_LANG_COOKIE}=(en|ko)`));
+    if (m) setLang(m[1] as AdminLang);
+  }, []);
+  const t = (k: string) => translate(lang, k);
 
   async function onSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -32,9 +39,7 @@ export default function AdminLoginPage() {
         password,
       });
       if (sErr) {
-        setMsg(
-          "Account created. If sign-in is blocked, confirm your email, then sign in."
-        );
+        setMsg(t("auth.created"));
         setMode("signin");
         setBusy(false);
         return;
@@ -63,7 +68,7 @@ export default function AdminLoginPage() {
         <div className="mb-8 flex flex-col items-center">
           <Logo tone="key" size={22} />
           <p className="mt-3 text-[12px] uppercase tracking-[var(--ls-wide)] text-[var(--text-muted)]">
-            Admin
+            {t("auth.admin")}
           </p>
         </div>
 
@@ -83,7 +88,7 @@ export default function AdminLoginPage() {
                     : "text-[var(--text-muted)]"
                 }`}
               >
-                {m === "signin" ? "Sign in" : "Create account"}
+                {m === "signin" ? t("auth.signin") : t("auth.signup")}
               </button>
             ))}
           </div>
@@ -92,7 +97,7 @@ export default function AdminLoginPage() {
             <input
               className={input}
               type="email"
-              placeholder="Email"
+              placeholder={t("auth.email")}
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
@@ -101,7 +106,7 @@ export default function AdminLoginPage() {
             <input
               className={input}
               type="password"
-              placeholder="Password"
+              placeholder={t("auth.password")}
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
@@ -119,17 +124,16 @@ export default function AdminLoginPage() {
               className="us-btn us-btn--md us-btn--primary us-btn--full mt-1"
             >
               {busy
-                ? "…"
+                ? t("common.busy")
                 : mode === "signin"
-                  ? "Sign in"
-                  : "Create account"}
+                  ? t("auth.signin")
+                  : t("auth.signup")}
             </button>
           </form>
         </div>
 
         <p className="mt-5 text-center text-[12px] leading-relaxed text-[var(--text-faint)]">
-          The first account becomes the super admin. After that, only invited
-          emails can join.
+          {t("auth.firstNote")}
         </p>
       </div>
     </div>

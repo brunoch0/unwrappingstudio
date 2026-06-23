@@ -1,10 +1,12 @@
 import Link from "next/link";
 import { createServerSupabase } from "@/lib/supabase/server";
+import { getAdminT } from "@/lib/admin-i18n-server";
 import type { Collection } from "@/lib/types";
 
 export const dynamic = "force-dynamic";
 
 export default async function AdminCollections() {
+  const { t } = await getAdminT();
   const supabase = await createServerSupabase();
   const { data } = await supabase
     .from("collections")
@@ -16,10 +18,10 @@ export default async function AdminCollections() {
     <div>
       <div className="flex items-center justify-between">
         <h1 className="text-[24px] font-bold tracking-[var(--ls-display)] text-[var(--text-strong)]">
-          Collections <span className="text-[var(--text-faint)]">({collections.length})</span>
+          {t("col.title")} <span className="text-[var(--text-faint)]">({collections.length})</span>
         </h1>
         <Link href="/admin/collections/new" className="us-btn us-btn--md us-btn--primary">
-          New collection
+          {t("col.new")}
         </Link>
       </div>
 
@@ -35,16 +37,16 @@ export default async function AdminCollections() {
               {c.is_featured && <span className="text-[12px] text-[var(--us-sub-700)]">★</span>}
               {!c.published && (
                 <span className="rounded-[var(--radius-pill)] bg-[var(--us-grey-100)] px-2 py-0.5 text-[10px] uppercase tracking-[0.04em] text-[var(--text-faint)]">
-                  Draft
+                  {t("col.draft")}
                 </span>
               )}
             </div>
             {c.subtitle && <p className="mt-1 text-[13px] text-[var(--text-muted)]">{c.subtitle}</p>}
-            <span className="mt-3 inline-block text-[13px] font-semibold text-[var(--us-sub-700)]">Edit →</span>
+            <span className="mt-3 inline-block text-[13px] font-semibold text-[var(--us-sub-700)]">{t("col.edit")}</span>
           </Link>
         ))}
         {collections.length === 0 && (
-          <p className="text-[14px] text-[var(--text-muted)]">No collections yet.</p>
+          <p className="text-[14px] text-[var(--text-muted)]">{t("col.empty")}</p>
         )}
       </div>
     </div>

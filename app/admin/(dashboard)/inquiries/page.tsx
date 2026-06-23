@@ -1,4 +1,5 @@
 import { createServerSupabase } from "@/lib/supabase/server";
+import { getAdminT } from "@/lib/admin-i18n-server";
 
 export const dynamic = "force-dynamic";
 
@@ -13,6 +14,7 @@ type Inquiry = {
 };
 
 export default async function AdminInquiries() {
+  const { t } = await getAdminT();
   const supabase = await createServerSupabase();
   const { data } = await supabase
     .from("inquiries")
@@ -24,10 +26,10 @@ export default async function AdminInquiries() {
   return (
     <div>
       <h1 className="text-[24px] font-bold tracking-[var(--ls-display)] text-[var(--text-strong)]">
-        Inquiries <span className="text-[var(--text-faint)]">({inquiries.length})</span>
+        {t("inq.title")} <span className="text-[var(--text-faint)]">({inquiries.length})</span>
       </h1>
       <p className="mt-1.5 text-[14px] text-[var(--text-muted)]">
-        Leads from the inquiry &amp; notify forms.
+        {t("inq.sub")}
       </p>
 
       <div className="mt-6 flex flex-col gap-3">
@@ -62,7 +64,7 @@ export default async function AdminInquiries() {
           </div>
         ))}
         {inquiries.length === 0 && (
-          <p className="text-[14px] text-[var(--text-muted)]">No inquiries yet.</p>
+          <p className="text-[14px] text-[var(--text-muted)]">{t("inq.empty")}</p>
         )}
       </div>
     </div>

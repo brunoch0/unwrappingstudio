@@ -2,6 +2,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { createServerSupabase } from "@/lib/supabase/server";
 import { getCurrentAdmin, canManage } from "@/lib/admin";
+import { getAdminT } from "@/lib/admin-i18n-server";
 import type { Collection } from "@/lib/types";
 import { saveCollection, deleteCollection } from "../actions";
 
@@ -19,6 +20,7 @@ export default async function EditCollection({
   const { id } = await params;
   const isNew = id === "new";
   const admin = await getCurrentAdmin();
+  const { t } = await getAdminT();
   const supabase = await createServerSupabase();
 
   let collection: Collection | null = null;
@@ -32,7 +34,7 @@ export default async function EditCollection({
   return (
     <div className="max-w-[680px]">
       <Link href="/admin/collections" className="text-[13px] text-[var(--text-muted)] hover:text-[var(--us-key)]">
-        ← Collections
+        {t("cf.back")}
       </Link>
       <h1 className="mt-2 text-[24px] font-bold tracking-[var(--ls-display)] text-[var(--text-strong)]">
         {isNew ? "New collection" : collection!.title}
@@ -43,50 +45,50 @@ export default async function EditCollection({
 
         <div className="grid gap-5 sm:grid-cols-2">
           <label className="flex flex-col gap-1.5">
-            <span className={label}>Title *</span>
+            <span className={label}>{t("cf.title")}</span>
             <input name="title" required defaultValue={collection?.title ?? ""} className={field} />
           </label>
           <label className="flex flex-col gap-1.5">
-            <span className={label}>Slug</span>
+            <span className={label}>{t("cf.slug")}</span>
             <input name="slug" defaultValue={collection?.slug ?? ""} className={field} placeholder="auto" />
           </label>
         </div>
 
         <label className="flex flex-col gap-1.5">
-          <span className={label}>Subtitle</span>
+          <span className={label}>{t("cf.subtitle")}</span>
           <input name="subtitle" defaultValue={collection?.subtitle ?? ""} className={field} />
         </label>
         <label className="flex flex-col gap-1.5">
-          <span className={label}>Theme story</span>
+          <span className={label}>{t("cf.story")}</span>
           <textarea name="description" rows={4} defaultValue={collection?.description ?? ""} className={`${field} resize-y`} />
         </label>
         <label className="flex flex-col gap-1.5">
-          <span className={label}>Cover image URL</span>
+          <span className={label}>{t("cf.cover")}</span>
           <input name="cover_image" defaultValue={collection?.cover_image ?? ""} className={field} />
         </label>
 
         <div className="grid gap-5 sm:grid-cols-2">
           <label className="flex flex-col gap-1.5">
-            <span className={label}>Sort order</span>
+            <span className={label}>{t("cf.sort")}</span>
             <input name="sort" type="number" defaultValue={collection?.sort ?? 0} className={field} />
           </label>
           <div className="flex flex-col justify-center gap-2.5 pt-5">
             <label className="flex items-center gap-2.5">
               <input name="is_featured" type="checkbox" defaultChecked={collection?.is_featured ?? false} className="h-4 w-4 accent-[var(--us-key)]" />
-              <span className="text-[14px] text-[var(--text-body)]">Featured</span>
+              <span className="text-[14px] text-[var(--text-body)]">{t("cf.featured")}</span>
             </label>
             <label className="flex items-center gap-2.5">
               <input name="published" type="checkbox" defaultChecked={collection?.published ?? true} className="h-4 w-4 accent-[var(--us-key)]" />
-              <span className="text-[14px] text-[var(--text-body)]">Published</span>
+              <span className="text-[14px] text-[var(--text-body)]">{t("cf.published")}</span>
             </label>
           </div>
         </div>
 
         <div className="flex items-center gap-3 pt-2">
           <button type="submit" className="us-btn us-btn--md us-btn--primary">
-            {isNew ? "Create collection" : "Save changes"}
+            {isNew ? t("cf.create") : t("cf.save")}
           </button>
-          <Link href="/admin/collections" className="us-btn us-btn--md us-btn--ghost">Cancel</Link>
+          <Link href="/admin/collections" className="us-btn us-btn--md us-btn--ghost">{t("cf.cancel")}</Link>
         </div>
       </form>
 
@@ -94,7 +96,7 @@ export default async function EditCollection({
         <form action={deleteCollection} className="mt-10 border-t border-[var(--border-hair)] pt-6">
           <input type="hidden" name="id" value={collection!.id} />
           <button type="submit" className="text-[13px] font-semibold text-[var(--us-danger)] hover:underline">
-            Delete this collection
+            {t("cf.delete")}
           </button>
         </form>
       )}

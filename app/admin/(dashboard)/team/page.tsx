@@ -1,6 +1,7 @@
 import { redirect } from "next/navigation";
 import { createServerSupabase } from "@/lib/supabase/server";
-import { getCurrentAdmin, ROLE_LABEL, type AdminUser, type AdminRole } from "@/lib/admin";
+import { getCurrentAdmin, type AdminUser, type AdminRole } from "@/lib/admin";
+import { getAdminT } from "@/lib/admin-i18n-server";
 import { inviteAdmin, updateRole, removeAdmin, cancelInvite } from "./actions";
 
 export const dynamic = "force-dynamic";
@@ -14,6 +15,7 @@ const ROLES: AdminRole[] = ["super_admin", "admin", "editor"];
 export default async function TeamPage() {
   const me = await getCurrentAdmin();
   if (!me || me.role !== "super_admin") redirect("/admin");
+  const { t } = await getAdminT();
 
   const supabase = await createServerSupabase();
   const [{ data: admins }, { data: invites }] = await Promise.all([
@@ -26,38 +28,36 @@ export default async function TeamPage() {
   return (
     <div className="max-w-[760px]">
       <h1 className="text-[24px] font-bold tracking-[var(--ls-display)] text-[var(--text-strong)]">
-        Team
+        {t("team.title")}
       </h1>
       <p className="mt-1.5 text-[14px] text-[var(--text-muted)]">
-        Invite people and set what they can do. Only a super admin sees this page.
+        {t("team.sub")}
       </p>
 
       {/* Invite */}
       <div className="mt-7 rounded-[var(--radius-md)] border border-[var(--border-hair)] bg-white p-6">
-        <h2 className="text-[15px] font-semibold text-[var(--text-strong)]">Invite an admin</h2>
-        <p className="mt-1 text-[13px] text-[var(--text-muted)]">
-          They get access when they create an account with this email at <code>/admin/login</code>.
-        </p>
+        <h2 className="text-[15px] font-semibold text-[var(--text-strong)]">{t("team.inviteTitle")}</h2>
+        <p className="mt-1 text-[13px] text-[var(--text-muted)]">{t("team.inviteNote")}</p>
         <form action={inviteAdmin} className="mt-4 flex flex-wrap items-end gap-3">
           <label className="flex flex-1 flex-col gap-1.5">
-            <span className="text-[12px] font-semibold uppercase tracking-[var(--ls-label)] text-[var(--text-muted)]">Email</span>
+            <span className="text-[12px] font-semibold uppercase tracking-[var(--ls-label)] text-[var(--text-muted)]">{t("team.email")}</span>
             <input name="email" type="email" required placeholder="name@email.com" className={`${field} w-full`} />
           </label>
           <label className="flex flex-col gap-1.5">
-            <span className="text-[12px] font-semibold uppercase tracking-[var(--ls-label)] text-[var(--text-muted)]">Role</span>
+            <span className="text-[12px] font-semibold uppercase tracking-[var(--ls-label)] text-[var(--text-muted)]">{t("team.role")}</span>
             <select name="role" defaultValue="admin" className={field}>
               {ROLES.map((r) => (
-                <option key={r} value={r}>{ROLE_LABEL[r]}</option>
+                <option key={r} value={r}>{t(`role.${r}`)}</option>
               ))}
             </select>
           </label>
-          <button type="submit" className="us-btn us-btn--md us-btn--primary">Send invite</button>
+          <button type="submit" className="us-btn us-btn--md us-btn--primary">{t("team.send")}</button>
         </form>
       </div>
 
       {/* Roster */}
       <h2 className="mt-9 text-[15px] font-semibold text-[var(--text-strong)]">
-        Admins ({roster.length})
+        {t("team.admins")} ({roster.length})
       </h2>
       <div className="mt-3 flex flex-col gap-2.5">
         {roster.map((a) => {
@@ -66,13 +66,13 @@ export default async function TeamPage() {
             <div key={a.id} className="flex flex-wrap items-center gap-3 rounded-[var(--radius-md)] border border-[var(--border-hair)] bg-white px-5 py-3.5">
               <div className="min-w-0">
                 <div className="truncate text-[14px] font-medium text-[var(--text-strong)]">
-                  {a.email} {self && <span className="text-[var(--text-faint)]">(you)</span>}
+                  {a.email} {self && <span className="text-[var(--text-faint)]">{t("team.you")}</span>}
                 </div>
               </div>
               <div className="ml-auto flex items-center gap-2">
                 {self ? (
                   <span className="rounded-[var(--radius-pill)] bg-[var(--us-key-tint)] px-3 py-1 text-[12px] font-semibold text-[var(--us-key)]">
-                    {ROLE_LABEL[a.role]}
+                    {t(`role.${a.role}`)}
                   </span>
                 ) : (
                   <>
@@ -80,15 +80,15 @@ export default async function TeamPage() {
                       <input type="hidden" name="id" value={a.id} />
                       <select name="role" defaultValue={a.role} className={field}>
                         {ROLES.map((r) => (
-                          <option key={r} value={r}>{ROLE_LABEL[r]}</option>
+                          <option key={r} value={r}>{t(`role.${r}`)}</option>
                         ))}
                       </select>
-                      <button type="submit" className="us-btn us-btn--sm us-btn--secondary">Save</button>
+                      <button type="submit" className="us-btn us-btn--sm us-btn--secondary">{t("team.save")}</button>
                     </form>
                     <form action={removeAdmin}>
                       <input type="hidden" name="id" value={a.id} />
                       <button type="submit" className="text-[13px] font-semibold text-[var(--us-danger)] hover:underline">
-                        Remove
+                        {t("team.remove")}
                       </button>
                     </form>
                   </>
@@ -103,19 +103,19 @@ export default async function TeamPage() {
       {pending.length > 0 && (
         <>
           <h2 className="mt-9 text-[15px] font-semibold text-[var(--text-strong)]">
-            Pending invites ({pending.length})
+            {t("team.pending")} ({pending.length})
           </h2>
           <div className="mt-3 flex flex-col gap-2.5">
             {pending.map((inv) => (
               <div key={inv.email} className="flex flex-wrap items-center gap-3 rounded-[var(--radius-md)] border border-dashed border-[var(--border-hair)] bg-white px-5 py-3.5">
                 <span className="text-[14px] text-[var(--text-body)]">{inv.email}</span>
                 <span className="rounded-[var(--radius-pill)] bg-[var(--surface-sunken)] px-2.5 py-0.5 text-[12px] font-medium text-[var(--text-muted)]">
-                  {ROLE_LABEL[inv.role]}
+                  {t(`role.${inv.role}`)}
                 </span>
                 <form action={cancelInvite} className="ml-auto">
                   <input type="hidden" name="email" value={inv.email} />
                   <button type="submit" className="text-[13px] font-semibold text-[var(--text-muted)] hover:text-[var(--us-danger)]">
-                    Cancel
+                    {t("team.cancel")}
                   </button>
                 </form>
               </div>

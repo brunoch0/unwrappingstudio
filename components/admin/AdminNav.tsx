@@ -2,17 +2,18 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { translate, type AdminLang } from "@/lib/admin-i18n";
 
 const ITEMS = [
-  { label: "Dashboard", href: "/admin" },
-  { label: "Products", href: "/admin/products" },
-  { label: "Collections", href: "/admin/collections" },
-  { label: "Inquiries", href: "/admin/inquiries" },
+  { key: "nav.dashboard", href: "/admin" },
+  { key: "nav.products", href: "/admin/products" },
+  { key: "nav.collections", href: "/admin/collections" },
+  { key: "nav.inquiries", href: "/admin/inquiries" },
 ];
 
-export function AdminNav({ isSuper }: { isSuper: boolean }) {
+export function AdminNav({ isSuper, lang }: { isSuper: boolean; lang: AdminLang }) {
   const pathname = usePathname();
-  const items = isSuper ? [...ITEMS, { label: "Team", href: "/admin/team" }] : ITEMS;
+  const items = isSuper ? [...ITEMS, { key: "nav.team", href: "/admin/team" }] : ITEMS;
   const active = (href: string) =>
     href === "/admin" ? pathname === "/admin" : pathname.startsWith(href);
 
@@ -28,7 +29,7 @@ export function AdminNav({ isSuper }: { isSuper: boolean }) {
               : "text-[var(--text-muted)]"
           }`}
         >
-          {it.label}
+          {translate(lang, it.key)}
         </Link>
       ))}
     </nav>
