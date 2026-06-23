@@ -18,6 +18,11 @@ type Inquiry = {
         subtotal?: number;
         currency?: string;
         shipping?: { country?: string; city?: string; address?: string; postal?: string };
+        mode?: string;
+        product_name?: string;
+        qty?: number;
+        country?: string;
+        drop?: string;
       }
     | null;
   created_at: string;
@@ -53,9 +58,14 @@ export default async function AdminInquiries() {
               }`}>
                 {q.type}
               </span>
-              {q.context?.product?.name && (
+              {(q.context?.product?.name || q.context?.product_name) && (
                 <span className="text-[13px] font-medium text-[var(--text-strong)]">
-                  {q.context.product.name}
+                  {q.context?.product?.name || q.context?.product_name}
+                </span>
+              )}
+              {q.type === "reservation" && q.context?.mode && (
+                <span className="rounded-[var(--radius-pill)] bg-[var(--us-key-tint)] px-2 py-0.5 text-[10px] font-semibold uppercase tracking-[0.04em] text-[var(--us-key)]">
+                  {q.context.mode}
                 </span>
               )}
               <span className="ml-auto text-[12px] text-[var(--text-faint)]">
@@ -70,6 +80,14 @@ export default async function AdminInquiries() {
             </div>
             {q.message && (
               <p className="mt-2 text-[14px] leading-relaxed text-[var(--text-body)]">{q.message}</p>
+            )}
+
+            {q.type === "reservation" && (
+              <p className="mt-2 text-[13px] text-[var(--text-muted)]">
+                {q.context?.qty ? `수량 ${q.context.qty}` : ""}
+                {q.context?.country ? ` · ${q.context.country}` : ""}
+                {q.context?.drop ? ` · drop: ${q.context.drop}` : ""}
+              </p>
             )}
 
             {q.type === "order" && q.context?.items && (

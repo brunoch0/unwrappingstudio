@@ -123,6 +123,21 @@ export default async function EditProduct({
         </div>
         <Row name="includes" title={t("pf.includes")}><input id="includes" name="includes" defaultValue={product?.includes ?? ""} className={field} /></Row>
 
+        <div className="rounded-[var(--radius-md)] border border-[var(--border-hair)] bg-[var(--surface-raised)] p-4">
+          <span className={label}>{t("pf.fulfillment")}</span>
+          <div className="mt-2 grid gap-3 sm:grid-cols-3">
+            <select name="fulfillment" defaultValue={product?.fulfillment ?? "in_stock"} className={field}>
+              <option value="in_stock">{t("ff.in_stock")}</option>
+              <option value="preorder">{t("ff.preorder")}</option>
+              <option value="reserve">{t("ff.reserve")}</option>
+              <option value="crowdfund">{t("ff.crowdfund")}</option>
+            </select>
+            <input name="goal" type="number" min={0} defaultValue={product?.goal ?? 0} className={field} placeholder={t("pf.goal")} />
+            <input name="campaign_ends_at" type="datetime-local" defaultValue={(product?.campaign_ends_at ?? "").slice(0, 16)} className={field} />
+          </div>
+          <p className="mt-2 text-[12px] text-[var(--text-faint)]">{t("pf.fulfillmentHint")}</p>
+        </div>
+
         <Row title={t("pf.thumbnail")}>
           <ImageUpload name="thumbnail" defaultValue={product?.thumbnail ?? ""} />
         </Row>

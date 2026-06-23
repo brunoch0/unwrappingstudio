@@ -56,6 +56,17 @@ export async function getAllProductSlugs(): Promise<string[]> {
   return (data ?? []).map((r: { slug: string }) => r.slug);
 }
 
+export async function getDropCollections(): Promise<Collection[]> {
+  const supabase = createSupabaseClient();
+  const { data } = await supabase
+    .from("collections")
+    .select("*")
+    .eq("published", true)
+    .eq("is_drop", true)
+    .order("drop_at", { ascending: true, nullsFirst: false });
+  return (data ?? []) as Collection[];
+}
+
 export async function getCollectionBySlug(
   slug: string
 ): Promise<Collection | null> {

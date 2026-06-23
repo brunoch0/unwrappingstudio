@@ -28,6 +28,8 @@ export async function saveCollection(formData: FormData) {
     sort: Number((formData.get("sort") as string) || 0),
     is_featured: formData.get("is_featured") === "on",
     published: formData.get("published") === "on",
+    is_drop: formData.get("is_drop") === "on",
+    drop_at: strOrNull(formData.get("drop_at")),
   };
 
   const supabase = await createServerSupabase();

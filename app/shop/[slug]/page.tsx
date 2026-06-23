@@ -8,6 +8,7 @@ import { ProductCard } from "@/components/ProductCard";
 import { PolicyTemplates } from "@/components/PolicyTemplates";
 import { InquiryForm } from "@/components/InquiryForm";
 import { AddToCart } from "@/components/cart/AddToCart";
+import { ReservePanel } from "@/components/ReservePanel";
 import { formatPrice } from "@/lib/format";
 import {
   getProductBySlug,
@@ -52,6 +53,10 @@ export default async function ProductPage({
   ]);
 
   const soldout = product.status === "soldout";
+  const reserveMode =
+    product.fulfillment && product.fulfillment !== "in_stock"
+      ? product.fulfillment
+      : null;
   const details: [string, string | null][] = [
     ["Material", product.material],
     ["Size", product.size],
@@ -122,36 +127,49 @@ export default async function ProductPage({
 
             {/* CTA */}
             <div className="mt-7 flex flex-col gap-3">
-              {!soldout && product.price != null && (
-                <AddToCart
-                  item={{
-                    id: product.id,
-                    slug: product.slug,
-                    name: product.name,
-                    price: product.price,
-                    currency: product.currency,
-                    thumbnail: product.thumbnail,
-                  }}
+              {reserveMode ? (
+                <ReservePanel
+                  product={{ id: product.id, slug: product.slug, name: product.name }}
+                  mode={reserveMode}
+                  goal={product.goal ?? 0}
+                  reserved={product.reserved_count ?? 0}
+                  endsAt={product.campaign_ends_at}
                 />
+              ) : (
+                <>
+                  {!soldout && product.price != null && (
+                    <AddToCart
+                      item={{
+                        id: product.id,
+                        slug: product.slug,
+                        name: product.name,
+                        price: product.price,
+                        currency: product.currency,
+                        thumbnail: product.thumbnail,
+                      }}
+                    />
+                  )}
+                  <div className="flex flex-col gap-3 sm:flex-row">
+                    <Button
+                      href="#inquire"
+                      variant={soldout ? "primary" : "secondary"}
+                      size="lg"
+                      full={soldout}
+                    >
+                      {soldout ? "Notify me when it's back" : "Inquire to buy"}
+                    </Button>
+                    <Button href="#shipping" variant="ghost" size="lg">
+                      Shipping &amp; returns
+                    </Button>
+                  </div>
+                  <p className="mt-3 text-[13px] text-[var(--text-faint)]">
+                    Checkout is order-request based: we confirm shipping &amp;
+                    duties to your country, then arrange payment. No card is
+                    charged online yet.
+                  </p>
+                </>
               )}
-              <div className="flex flex-col gap-3 sm:flex-row">
-                <Button
-                  href="#inquire"
-                  variant={soldout ? "primary" : "secondary"}
-                  size="lg"
-                  full={soldout}
-                >
-                  {soldout ? "Notify me when it's back" : "Inquire to buy"}
-                </Button>
-                <Button href="#shipping" variant="ghost" size="lg">
-                  Shipping &amp; returns
-                </Button>
-              </div>
             </div>
-            <p className="mt-3 text-[13px] text-[var(--text-faint)]">
-              Checkout is order-request based: we confirm shipping &amp; duties to
-              your country, then arrange payment. No card is charged online yet.
-            </p>
 
             {/* Curation comment — why this piece */}
             {product.curation_comment && (

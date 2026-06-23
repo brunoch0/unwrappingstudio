@@ -181,6 +181,62 @@
 .us-btn--dark { background: #fff; color: var(--us-key); border-color: #fff; }
 .us-btn--dark:hover { background: var(--us-sub-200); border-color: var(--us-sub-200); }
 
+/* ----- Editorial prose (Journal article body) ----- */
+.us-prose {
+  font-size: 18px;
+  line-height: 1.75;
+  color: var(--text-body);
+}
+.us-prose > * + * {
+  margin-top: 1.4em;
+}
+.us-prose h2 {
+  margin-top: 2em;
+  font-size: 26px;
+  font-weight: 700;
+  line-height: 1.2;
+  letter-spacing: var(--ls-display);
+  color: var(--text-strong);
+}
+.us-prose h3 {
+  margin-top: 1.6em;
+  font-size: 20px;
+  font-weight: 600;
+  color: var(--text-strong);
+}
+.us-prose a {
+  color: var(--us-sub-700);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+.us-prose strong {
+  color: var(--text-strong);
+  font-weight: 600;
+}
+.us-prose blockquote {
+  margin-left: 0;
+  border-left: 2px solid var(--us-sub);
+  padding-left: 1.2em;
+  font-size: 22px;
+  line-height: 1.5;
+  color: var(--text-strong);
+}
+.us-prose ul,
+.us-prose ol {
+  padding-left: 1.4em;
+}
+.us-prose li + li {
+  margin-top: 0.5em;
+}
+.us-prose img {
+  width: 100%;
+  border-radius: var(--radius-md);
+}
+.us-prose hr {
+  border: none;
+  border-top: 1px solid var(--border-hair);
+}
+
 /* The strike device — the brand's signature gesture, a line struck through */
 .us-strike {
   position: relative;

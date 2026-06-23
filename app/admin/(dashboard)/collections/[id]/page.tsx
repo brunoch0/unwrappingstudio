@@ -85,6 +85,18 @@ export default async function EditCollection({
           </div>
         </div>
 
+        <div className="rounded-[var(--radius-md)] border border-[var(--border-hair)] bg-[var(--surface-raised)] p-4">
+          <label className="flex items-center gap-2.5">
+            <input name="is_drop" type="checkbox" defaultChecked={collection?.is_drop ?? false} className="h-4 w-4 accent-[var(--us-key)]" />
+            <span className="text-[14px] font-medium text-[var(--text-strong)]">{t("cf.isDrop")}</span>
+          </label>
+          <div className="mt-3 flex flex-col gap-1.5">
+            <span className={label}>{t("cf.dropAt")}</span>
+            <input name="drop_at" type="datetime-local" defaultValue={(collection?.drop_at ?? "").slice(0, 16)} className={field} />
+            <span className="text-[12px] text-[var(--text-faint)]">{t("cf.dropHint")}</span>
+          </div>
+        </div>
+
         <div className="flex items-center gap-3 pt-2">
           <button type="submit" className="us-btn us-btn--md us-btn--primary">
             {isNew ? t("cf.create") : t("cf.save")}

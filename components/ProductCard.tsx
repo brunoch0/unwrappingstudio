@@ -3,8 +3,19 @@ import Link from "next/link";
 import type { Product } from "@/lib/types";
 import { formatPrice } from "@/lib/format";
 
+const MODE_LABEL: Record<string, string> = {
+  preorder: "Pre-order",
+  reserve: "Reserve",
+  crowdfund: "Crowdfunding",
+};
+
 export function ProductCard({ product }: { product: Product }) {
   const soldout = product.status === "soldout";
+  const mode =
+    product.fulfillment && product.fulfillment !== "in_stock"
+      ? product.fulfillment
+      : null;
+  const cta = soldout ? "Notify me →" : mode ? `${MODE_LABEL[mode]} →` : "Inquire →";
   return (
     <Link
       href={`/shop/${product.slug}`}
@@ -25,11 +36,15 @@ export function ProductCard({ product }: { product: Product }) {
             style={{ background: "var(--backdrop-cinematic)" }}
           />
         )}
-        {soldout && (
+        {soldout ? (
           <span className="absolute left-3 top-3 rounded-[var(--radius-pill)] bg-black/70 px-3 py-1 text-[11px] font-semibold uppercase tracking-[var(--ls-label)] text-[var(--us-sub-200)]">
             Sold out
           </span>
-        )}
+        ) : mode ? (
+          <span className="absolute left-3 top-3 rounded-[var(--radius-pill)] bg-[var(--us-sub)] px-3 py-1 text-[11px] font-semibold uppercase tracking-[var(--ls-label)] text-[var(--us-key)]">
+            {MODE_LABEL[mode]}
+          </span>
+        ) : null}
       </div>
 
       <div className="flex flex-1 flex-col p-4">
@@ -60,7 +75,7 @@ export function ProductCard({ product }: { product: Product }) {
               {formatPrice(product.price, product.currency)}
             </span>
             <span className="text-[12px] font-semibold uppercase tracking-[var(--ls-label)] text-[var(--us-sub-700)] opacity-0 transition-opacity group-hover:opacity-100">
-              {soldout ? "Notify me →" : "Inquire →"}
+              {cta}
             </span>
           </div>
         </div>

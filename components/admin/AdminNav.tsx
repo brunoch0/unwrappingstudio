@@ -8,6 +8,7 @@ const ITEMS = [
   { key: "nav.dashboard", href: "/admin" },
   { key: "nav.products", href: "/admin/products" },
   { key: "nav.collections", href: "/admin/collections" },
+  { key: "nav.journal", href: "/admin/journal" },
   { key: "nav.inquiries", href: "/admin/inquiries" },
 ];
 

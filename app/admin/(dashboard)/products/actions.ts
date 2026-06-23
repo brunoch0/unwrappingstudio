@@ -55,6 +55,9 @@ export async function saveProduct(formData: FormData) {
     includes: strOrNull(formData.get("includes")),
     badges: toList(formData.get("badges") as string | null),
     images: toList(formData.get("images") as string | null),
+    fulfillment: (formData.get("fulfillment") as string) || "in_stock",
+    goal: Number((formData.get("goal") as string) || 0),
+    campaign_ends_at: strOrNull(formData.get("campaign_ends_at")),
   };
 
   const supabase = await createServerSupabase();
