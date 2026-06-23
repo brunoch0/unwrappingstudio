@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import { createServerSupabase } from "@/lib/supabase/server";
 import { getCurrentAdmin, canManage } from "@/lib/admin";
 import { getAdminT } from "@/lib/admin-i18n-server";
+import { ImageUpload } from "@/components/admin/ImageUpload";
 import type { Product, Collection } from "@/lib/types";
 import { saveProduct, deleteProduct } from "../actions";
 
@@ -122,9 +123,11 @@ export default async function EditProduct({
         </div>
         <Row name="includes" title={t("pf.includes")}><input id="includes" name="includes" defaultValue={product?.includes ?? ""} className={field} /></Row>
 
-        <Row name="thumbnail" title={t("pf.thumbnail")}><input id="thumbnail" name="thumbnail" defaultValue={product?.thumbnail ?? ""} className={field} /></Row>
-        <Row name="images" title={t("pf.gallery")} hint={t("pf.galleryHint")}>
-          <textarea id="images" name="images" rows={3} defaultValue={(product?.images ?? []).join("\n")} className={`${field} resize-y`} />
+        <Row title={t("pf.thumbnail")}>
+          <ImageUpload name="thumbnail" defaultValue={product?.thumbnail ?? ""} />
+        </Row>
+        <Row title={t("pf.gallery")} hint={t("pf.galleryHint")}>
+          <ImageUpload name="images" defaultValue={product?.images ?? []} multiple />
         </Row>
         <Row name="badges" title={t("pf.badges")} hint={t("pf.badgesHint")}>
           <input id="badges" name="badges" defaultValue={(product?.badges ?? []).join(", ")} className={field} />

@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import { createServerSupabase } from "@/lib/supabase/server";
 import { getCurrentAdmin, canManage } from "@/lib/admin";
 import { getAdminT } from "@/lib/admin-i18n-server";
+import { ImageUpload } from "@/components/admin/ImageUpload";
 import type { Collection } from "@/lib/types";
 import { saveCollection, deleteCollection } from "../actions";
 
@@ -62,10 +63,10 @@ export default async function EditCollection({
           <span className={label}>{t("cf.story")}</span>
           <textarea name="description" rows={4} defaultValue={collection?.description ?? ""} className={`${field} resize-y`} />
         </label>
-        <label className="flex flex-col gap-1.5">
+        <div className="flex flex-col gap-1.5">
           <span className={label}>{t("cf.cover")}</span>
-          <input name="cover_image" defaultValue={collection?.cover_image ?? ""} className={field} />
-        </label>
+          <ImageUpload name="cover_image" defaultValue={collection?.cover_image ?? ""} />
+        </div>
 
         <div className="grid gap-5 sm:grid-cols-2">
           <label className="flex flex-col gap-1.5">
