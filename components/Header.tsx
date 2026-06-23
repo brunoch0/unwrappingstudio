@@ -4,10 +4,12 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
 import { Logo } from "./Logo";
+import { useCart } from "./cart/CartProvider";
 
 const NAV = [
   { label: "Studio", href: "/" },
   { label: "Shop", href: "/shop" },
+  { label: "All pieces", href: "/shop/all" },
   { label: "Collections", href: "/shop#collections" },
   { label: "Shipping", href: "/shop#shipping" },
 ];
@@ -16,6 +18,7 @@ export function Header() {
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
   const [lang, setLang] = useState<"EN" | "AR">("EN");
+  const { count } = useCart();
 
   if (pathname.startsWith("/admin")) return null;
 
@@ -55,6 +58,18 @@ export function Header() {
             {lang} <span className="opacity-50">/</span>{" "}
             <span className="opacity-50">{lang === "EN" ? "AR" : "EN"}</span>
           </button>
+          <Link
+            href="/shop/cart"
+            aria-label="Cart"
+            className="relative flex items-center gap-1.5 text-[13px] font-medium text-[var(--text-muted)] transition-colors hover:text-[var(--us-key)]"
+          >
+            <span aria-hidden>Cart</span>
+            {count > 0 && (
+              <span className="flex h-[18px] min-w-[18px] items-center justify-center rounded-full bg-[var(--us-key)] px-1 text-[10px] font-bold text-white">
+                {count}
+              </span>
+            )}
+          </Link>
           <Link href="/shop" className="us-btn us-btn--sm us-btn--primary hidden sm:inline-flex">
             Shop the curation
           </Link>

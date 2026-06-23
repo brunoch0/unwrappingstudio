@@ -11,7 +11,7 @@ export function CollectionCard({
 }) {
   return (
     <Link
-      href="/shop#products"
+      href={`/shop/collections/${collection.slug}`}
       className="group relative flex aspect-[3/4] flex-col justify-end overflow-hidden rounded-[var(--radius-md)] bg-[var(--us-grey-900)]"
     >
       {collection.cover_image && (

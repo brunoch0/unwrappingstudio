@@ -1,8 +1,12 @@
 import type { Metadata } from "next";
 import { Golos_Text } from "next/font/google";
+import Script from "next/script";
 import "./globals.css";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
+import { CartProvider } from "@/components/cart/CartProvider";
+import { Analytics } from "@/components/Analytics";
+import { GA_ID } from "@/lib/analytics";
 
 const golos = Golos_Text({
   variable: "--font-golos",
@@ -33,9 +37,19 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${golos.variable} h-full antialiased`}>
       <body className="flex min-h-full flex-col">
-        <Header />
-        <main className="flex-1">{children}</main>
-        <Footer />
+        <Script
+          src={`https://www.googletagmanager.com/gtag/js?id=${GA_ID}`}
+          strategy="afterInteractive"
+        />
+        <Script id="ga4-init" strategy="afterInteractive">
+          {`window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','${GA_ID}');`}
+        </Script>
+        <CartProvider>
+          <Header />
+          <main className="flex-1">{children}</main>
+          <Footer />
+        </CartProvider>
+        <Analytics />
       </body>
     </html>
   );

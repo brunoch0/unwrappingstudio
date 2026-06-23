@@ -3,13 +3,23 @@ import { getAdminT } from "@/lib/admin-i18n-server";
 
 export const dynamic = "force-dynamic";
 
+type OrderItem = { name?: string; qty?: number; price?: number };
 type Inquiry = {
   id: string;
   type: string;
   name: string | null;
   contact: string;
   message: string | null;
-  context: { source?: string; product?: { name?: string } | null } | null;
+  context:
+    | {
+        source?: string;
+        product?: { name?: string } | null;
+        items?: OrderItem[];
+        subtotal?: number;
+        currency?: string;
+        shipping?: { country?: string; city?: string; address?: string; postal?: string };
+      }
+    | null;
   created_at: string;
 };
 
@@ -60,6 +70,30 @@ export default async function AdminInquiries() {
             </div>
             {q.message && (
               <p className="mt-2 text-[14px] leading-relaxed text-[var(--text-body)]">{q.message}</p>
+            )}
+
+            {q.type === "order" && q.context?.items && (
+              <div className="mt-3 rounded-[var(--radius-sm)] border border-[var(--border-hair)] bg-[var(--surface-raised)] p-3.5">
+                <ul className="flex flex-col gap-1 text-[13px] text-[var(--text-body)]">
+                  {q.context.items.map((it, i) => (
+                    <li key={i} className="flex justify-between gap-3">
+                      <span>{it.name} <span className="text-[var(--text-faint)]">× {it.qty}</span></span>
+                      <span className="text-[var(--text-muted)]">
+                        {q.context?.currency ?? "AED"} {((it.price ?? 0) * (it.qty ?? 1)).toLocaleString()}
+                      </span>
+                    </li>
+                  ))}
+                </ul>
+                <div className="mt-2 flex justify-between border-t border-[var(--border-hair)] pt-2 text-[13px] font-semibold text-[var(--text-strong)]">
+                  <span>합계</span>
+                  <span>{q.context.currency ?? "AED"} {(q.context.subtotal ?? 0).toLocaleString()}</span>
+                </div>
+                {q.context.shipping && (
+                  <p className="mt-2 text-[12px] text-[var(--text-muted)]">
+                    배송지: {[q.context.shipping.country, q.context.shipping.city, q.context.shipping.address, q.context.shipping.postal].filter(Boolean).join(", ")}
+                  </p>
+                )}
+              </div>
             )}
           </div>
         ))}

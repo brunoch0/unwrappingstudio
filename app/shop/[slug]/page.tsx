@@ -7,6 +7,7 @@ import { ProductGallery } from "@/components/ProductGallery";
 import { ProductCard } from "@/components/ProductCard";
 import { PolicyTemplates } from "@/components/PolicyTemplates";
 import { InquiryForm } from "@/components/InquiryForm";
+import { AddToCart } from "@/components/cart/AddToCart";
 import { formatPrice } from "@/lib/format";
 import {
   getProductBySlug,
@@ -119,18 +120,37 @@ export default async function ProductPage({
               </div>
             )}
 
-            {/* CTA — no checkout yet, so alternative conversion */}
-            <div className="mt-7 flex flex-col gap-3 sm:flex-row">
-              <Button href="#inquire" variant="primary" size="lg" full>
-                {soldout ? "Notify me when it's back" : "Inquire to buy"}
-              </Button>
-              <Button href="#shipping" variant="secondary" size="lg">
-                Shipping &amp; returns
-              </Button>
+            {/* CTA */}
+            <div className="mt-7 flex flex-col gap-3">
+              {!soldout && product.price != null && (
+                <AddToCart
+                  item={{
+                    id: product.id,
+                    slug: product.slug,
+                    name: product.name,
+                    price: product.price,
+                    currency: product.currency,
+                    thumbnail: product.thumbnail,
+                  }}
+                />
+              )}
+              <div className="flex flex-col gap-3 sm:flex-row">
+                <Button
+                  href="#inquire"
+                  variant={soldout ? "primary" : "secondary"}
+                  size="lg"
+                  full={soldout}
+                >
+                  {soldout ? "Notify me when it's back" : "Inquire to buy"}
+                </Button>
+                <Button href="#shipping" variant="ghost" size="lg">
+                  Shipping &amp; returns
+                </Button>
+              </div>
             </div>
             <p className="mt-3 text-[13px] text-[var(--text-faint)]">
-              Checkout for the Gulf is opening in stages. For now we confirm
-              shipping, hold a piece, or arrange payment by message.
+              Checkout is order-request based: we confirm shipping &amp; duties to
+              your country, then arrange payment. No card is charged online yet.
             </p>
 
             {/* Curation comment — why this piece */}

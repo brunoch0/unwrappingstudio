@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { createSupabaseClient } from "@/lib/supabase";
+import { getUtm, track } from "@/lib/analytics";
 
 type Mode = "inquiry" | "notify";
 
@@ -32,7 +33,11 @@ export function InquiryForm({
       name: name.trim() || null,
       contact: contact.trim(),
       message: message.trim() || null,
-      context: { source, product: productContext ?? null },
+      context: { source, product: productContext ?? null, utm: getUtm() },
+    });
+    if (!error) track(mode === "notify" ? "notify_signup" : "inquiry_submit", {
+      product: productContext?.slug,
+      source,
     });
     setState(error ? "error" : "done");
   }
