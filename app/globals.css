@@ -181,6 +181,30 @@
 .us-btn--dark { background: #fff; color: var(--us-key); border-color: #fff; }
 .us-btn--dark:hover { background: var(--us-sub-200); border-color: var(--us-sub-200); }
 
+.us-btn--wa { background: #25d366; color: #04331b; border-color: #25d366; }
+.us-btn--wa:hover { background: #1fbe5b; border-color: #1fbe5b; }
+
+/* Floating WhatsApp chat button (storefront) */
+.us-wa-float {
+  position: fixed;
+  right: 18px;
+  bottom: 18px;
+  z-index: 60;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 52px;
+  height: 52px;
+  border-radius: var(--radius-pill);
+  background: #25d366;
+  color: #04331b;
+  box-shadow: var(--shadow-md);
+  transition: transform var(--dur-fast) var(--ease-inout);
+}
+.us-wa-float:hover {
+  transform: translateY(-2px);
+}
+
 /* ----- Editorial prose (Journal article body) ----- */
 .us-prose {
   font-size: 18px;

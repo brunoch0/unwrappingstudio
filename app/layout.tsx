@@ -6,6 +6,7 @@ import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { CartProvider } from "@/components/cart/CartProvider";
 import { Analytics } from "@/components/Analytics";
+import { FloatingWhatsApp } from "@/components/FloatingWhatsApp";
 import { GA_ID } from "@/lib/analytics";
 
 const golos = Golos_Text({
@@ -49,6 +50,7 @@ export default function RootLayout({
           <main className="flex-1">{children}</main>
           <Footer />
         </CartProvider>
+        <FloatingWhatsApp />
         <Analytics />
       </body>
     </html>

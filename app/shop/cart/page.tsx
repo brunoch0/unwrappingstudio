@@ -4,6 +4,8 @@ import Image from "next/image";
 import Link from "next/link";
 import { useCart } from "@/components/cart/CartProvider";
 import { Button } from "@/components/Button";
+import { WhatsAppButton } from "@/components/WhatsAppButton";
+import { cartOrderText } from "@/lib/whatsapp";
 import { formatPrice } from "@/lib/format";
 
 export default function CartPage() {
@@ -87,10 +89,16 @@ export default function CartPage() {
             Shipping &amp; any duties are confirmed per order and destination —
             see <Link href="/shop#shipping" className="text-[var(--us-sub-700)] hover:underline">the policy</Link>.
           </p>
-          <div className="mt-5">
+          <div className="mt-5 flex flex-col gap-2.5">
             <Button href="/shop/checkout" variant="primary" size="lg" full>
               Continue to checkout
             </Button>
+            <WhatsAppButton
+              text={cartOrderText(items, subtotal, currency)}
+              label="Order on WhatsApp"
+              full
+              event="whatsapp_order_cart"
+            />
           </div>
         </div>
       </div>

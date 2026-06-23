@@ -9,6 +9,8 @@ import { PolicyTemplates } from "@/components/PolicyTemplates";
 import { InquiryForm } from "@/components/InquiryForm";
 import { AddToCart } from "@/components/cart/AddToCart";
 import { ReservePanel } from "@/components/ReservePanel";
+import { WhatsAppButton } from "@/components/WhatsAppButton";
+import { productOrderText } from "@/lib/whatsapp";
 import { formatPrice } from "@/lib/format";
 import {
   getProductBySlug,
@@ -147,6 +149,14 @@ export default async function ProductPage({
                         currency: product.currency,
                         thumbnail: product.thumbnail,
                       }}
+                    />
+                  )}
+                  {!soldout && (
+                    <WhatsAppButton
+                      text={productOrderText(product.name, product.slug)}
+                      label="Order on WhatsApp"
+                      full
+                      event="whatsapp_order_product"
                     />
                   )}
                   <div className="flex flex-col gap-3 sm:flex-row">
