@@ -24,4 +24,10 @@ export type Product = {
   is_featured: boolean;
   status: "active" | "hidden" | "soldout";
   badges: string[];
+  material: string | null;
+  size: string | null;
+  care: string | null;
+  origin: string | null;
+  includes: string | null;
+  images: string[];
 };

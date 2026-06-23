@@ -5,8 +5,16 @@ import { createSupabaseClient } from "@/lib/supabase";
 
 type Mode = "inquiry" | "notify";
 
-export function InquiryForm() {
-  const [mode, setMode] = useState<Mode>("inquiry");
+export function InquiryForm({
+  defaultMode = "inquiry",
+  productContext,
+  source = "shop_landing",
+}: {
+  defaultMode?: Mode;
+  productContext?: { id: string; slug: string; name: string };
+  source?: string;
+} = {}) {
+  const [mode, setMode] = useState<Mode>(defaultMode);
   const [name, setName] = useState("");
   const [contact, setContact] = useState("");
   const [message, setMessage] = useState("");
@@ -24,7 +32,7 @@ export function InquiryForm() {
       name: name.trim() || null,
       contact: contact.trim(),
       message: message.trim() || null,
-      context: { source: "shop_landing" },
+      context: { source, product: productContext ?? null },
     });
     setState(error ? "error" : "done");
   }

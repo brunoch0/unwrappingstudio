@@ -7,7 +7,7 @@ export function ProductCard({ product }: { product: Product }) {
   const soldout = product.status === "soldout";
   return (
     <Link
-      href={soldout ? "/shop#inquire" : "/shop#inquire"}
+      href={`/shop/${product.slug}`}
       className="group flex flex-col overflow-hidden rounded-[var(--radius-md)] border border-[var(--border-hair)] bg-[var(--surface-card)] transition-[transform,box-shadow] duration-200 ease-[var(--ease-reveal)] hover:-translate-y-[3px] hover:shadow-[var(--shadow-md)]"
     >
       <div className="relative aspect-[4/5] w-full overflow-hidden bg-[var(--us-grey-100)]">

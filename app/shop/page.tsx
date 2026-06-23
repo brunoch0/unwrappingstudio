@@ -4,6 +4,7 @@ import { Button } from "@/components/Button";
 import { ProductCard } from "@/components/ProductCard";
 import { CollectionCard } from "@/components/CollectionCard";
 import { InquiryForm } from "@/components/InquiryForm";
+import { PolicyTemplates } from "@/components/PolicyTemplates";
 import { getFeaturedCollections, getRecommendedProducts } from "@/lib/shop";
 
 export const revalidate = 300;
@@ -19,36 +20,6 @@ const TRUST = [
   ["7–14 working days", "Tracked once it leaves the maker's hands."],
   ["Duties, explained", "What you may owe, who charges it, and when."],
   ["7-day returns", "Clear terms — see the policy before you ask."],
-];
-
-const POLICY = [
-  {
-    eyebrow: "Shipping",
-    title: "Where it goes, how long it takes",
-    lines: [
-      "Currently shipping to the UAE and KSA, with more Gulf countries opening as demand grows.",
-      "Expect 7–14 working days. Customs and air schedules can add time; tracking is shared once it ships.",
-      "Shipping cost is confirmed per order by weight, volume, and destination.",
-    ],
-  },
-  {
-    eyebrow: "Duties & taxes",
-    title: "No surprises at the door",
-    lines: [
-      "Customs or VAT may apply on arrival, charged by your local authority or courier — not by us.",
-      "Amounts shown are estimates, not final, and are usually paid on delivery.",
-      "We tell you upfront when a piece is likely to carry a duty.",
-    ],
-  },
-  {
-    eyebrow: "Returns & exchange",
-    title: "If it isn't right",
-    lines: [
-      "Returns accepted within 7 days of delivery for unused items in original condition.",
-      "Made-to-order, hygiene, and final-sale pieces are marked and excluded.",
-      "Steps are simple: request → approval → ship back → inspection → refund.",
-    ],
-  },
 ];
 
 export default async function ShopPage() {
@@ -201,31 +172,8 @@ export default async function ShopPage() {
           <h2 className="mt-4 max-w-[24ch] text-[26px] font-bold tracking-[var(--ls-display)] text-[var(--text-strong)] sm:text-[32px]">
             Shipping, duties, and returns — the same way, every time
           </h2>
-          <div className="mt-10 grid gap-6 md:grid-cols-3">
-            {POLICY.map((b) => (
-              <div
-                key={b.eyebrow}
-                className="rounded-[var(--radius-md)] border border-[var(--border-hair)] bg-[var(--surface-card)] p-6 shadow-[var(--shadow-xs)]"
-              >
-                <span className="text-[11px] font-semibold uppercase tracking-[var(--ls-label)] text-[var(--us-sub-700)]">
-                  {b.eyebrow}
-                </span>
-                <h3 className="mt-2 text-[18px] font-semibold text-[var(--text-strong)]">
-                  {b.title}
-                </h3>
-                <ul className="mt-4 space-y-3">
-                  {b.lines.map((l) => (
-                    <li
-                      key={l}
-                      className="flex gap-2.5 text-[14px] leading-relaxed text-[var(--text-body)]"
-                    >
-                      <span className="mt-2 h-1 w-1 shrink-0 rounded-full bg-[var(--us-sub)]" />
-                      <span>{l}</span>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            ))}
+          <div className="mt-10">
+            <PolicyTemplates />
           </div>
           <p className="mt-6 text-[13px] text-[var(--text-faint)]">
             Estimates shown are not final charges. Final shipping and any duties
