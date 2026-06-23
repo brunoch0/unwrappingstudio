@@ -1,7 +1,12 @@
+"use client";
+
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { Logo } from "./Logo";
 
 export function Footer() {
+  const pathname = usePathname();
+  if (pathname.startsWith("/admin")) return null;
   return (
     <footer className="bg-[var(--surface-darkest)] text-white">
       <div className="us-glitter-wrap relative mx-auto max-w-[1200px] px-5 py-16 md:px-10">

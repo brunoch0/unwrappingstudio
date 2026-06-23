@@ -17,6 +17,8 @@ export function Header() {
   const [open, setOpen] = useState(false);
   const [lang, setLang] = useState<"EN" | "AR">("EN");
 
+  if (pathname.startsWith("/admin")) return null;
+
   const isActive = (href: string) =>
     href === "/" ? pathname === "/" : pathname.startsWith(href.split("#")[0]);
 
