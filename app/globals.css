@@ -1,0 +1,233 @@
+@import "tailwindcss";
+
+/* ============================================================
+   Unwrapping Studio — Design tokens
+   Ported from the studio's brand system. Two greens do everything:
+   Key #023500 (deep, unwrapped) + Sub #33CC66 (bright, reveal).
+   ============================================================ */
+:root {
+  /* Brand core */
+  --us-key: #023500;
+  --us-sub: #33cc66;
+  --us-black: #000000;
+  --us-white: #ffffff;
+
+  /* Key green ramp */
+  --us-key-950: #011d00;
+  --us-key-900: #023500;
+  --us-key-800: #034a02;
+  --us-key-700: #066010;
+  --us-key-tint: #e6efe6;
+
+  /* Sub green ramp */
+  --us-sub-700: #1f9c4c;
+  --us-sub-600: #29b359;
+  --us-sub-500: #33cc66;
+  --us-sub-400: #5cd884;
+  --us-sub-200: #b7eecb;
+  --us-sub-tint: #ecfaf1;
+
+  /* Neutral ink ramp */
+  --us-ink: #0c100d;
+  --us-grey-900: #16191a;
+  --us-grey-800: #2a2f2c;
+  --us-grey-600: #565d58;
+  --us-grey-400: #8b938d;
+  --us-grey-300: #b4bbb6;
+  --us-grey-200: #d8ddd9;
+  --us-grey-100: #eef1ee;
+  --us-grey-50: #f6f8f6;
+
+  /* Functional */
+  --us-success: var(--us-sub-600);
+  --us-danger: #c0392b;
+  --us-warning: #d99000;
+
+  /* Surfaces */
+  --surface-page: var(--us-white);
+  --surface-raised: var(--us-grey-50);
+  --surface-card: var(--us-white);
+  --surface-sunken: var(--us-grey-100);
+  --surface-dark: var(--us-key);
+  --surface-darkest: var(--us-black);
+  --surface-accent: var(--us-sub);
+
+  /* Text */
+  --text-strong: var(--us-ink);
+  --text-body: var(--us-grey-800);
+  --text-muted: var(--us-grey-600);
+  --text-faint: var(--us-grey-400);
+  --text-on-dark: var(--us-white);
+  --text-on-dark-mut: var(--us-sub-200);
+  --text-brand: var(--us-key);
+  --text-accent: var(--us-sub-700);
+
+  /* Lines */
+  --border-hair: var(--us-grey-200);
+  --border-strong: var(--us-ink);
+  --border-on-dark: rgba(255, 255, 255, 0.18);
+  --ring: var(--us-sub-500);
+
+  /* Type tracking */
+  --ls-display: -0.02em;
+  --ls-label: 0.08em;
+  --ls-wide: 0.22em;
+  --ls-logo: 0.04em;
+
+  /* Radii */
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+  --radius-pill: 999px;
+
+  /* Shadows (cool, low, green-tinted) */
+  --shadow-xs: 0 1px 2px rgba(2, 53, 0, 0.06);
+  --shadow-sm: 0 2px 8px rgba(2, 53, 0, 0.08);
+  --shadow-md: 0 8px 24px rgba(2, 53, 0, 0.1);
+  --shadow-lg: 0 18px 48px rgba(2, 53, 0, 0.14);
+  --shadow-focus: 0 0 0 3px rgba(51, 204, 102, 0.35);
+
+  /* Motion */
+  --ease-reveal: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-inout: cubic-bezier(0.45, 0, 0.55, 1);
+  --dur-fast: 140ms;
+  --dur-base: 240ms;
+  --dur-slow: 520ms;
+
+  /* Cinematic backdrop — black field, green-lit ribbon glow */
+  --backdrop-cinematic:
+    radial-gradient(120% 90% at 72% 18%, rgba(51, 204, 102, 0.18), transparent 55%),
+    radial-gradient(80% 70% at 20% 90%, rgba(2, 53, 0, 0.55), transparent 60%),
+    linear-gradient(160deg, #050a06 0%, #000000 70%);
+}
+
+@theme inline {
+  --color-key: var(--us-key);
+  --color-sub: var(--us-sub);
+  --color-ink: var(--us-ink);
+  --color-paper: var(--us-white);
+  --font-sans: var(--font-golos), 'Golos Text', system-ui, sans-serif;
+}
+
+@layer base {
+  * {
+    box-sizing: border-box;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    margin: 0;
+    background: var(--surface-page);
+    color: var(--text-body);
+    font-family: var(--font-golos), 'Golos Text', system-ui, -apple-system, sans-serif;
+    font-size: 16px;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+
+  a {
+    color: inherit;
+    text-decoration: none;
+  }
+
+  ::selection {
+    background: var(--us-sub-200);
+    color: var(--us-key);
+  }
+}
+
+/* ----- Button component (unlayered: authoritative over utilities/preflight) ----- */
+.us-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-family: inherit;
+  font-weight: 600;
+  line-height: 1;
+  text-transform: uppercase;
+  letter-spacing: var(--ls-label);
+  border: 1px solid transparent;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition:
+    background-color var(--dur-fast) var(--ease-inout),
+    border-color var(--dur-fast) var(--ease-inout),
+    transform var(--dur-fast) var(--ease-inout);
+}
+.us-btn:active {
+  transform: translateY(1px);
+}
+.us-btn--sm { gap: 6px; padding: 8px 16px; font-size: 12px; }
+.us-btn--md { gap: 8px; padding: 12px 22px; font-size: 13px; }
+.us-btn--lg { gap: 10px; padding: 16px 30px; font-size: 15px; }
+.us-btn--full { width: 100%; }
+
+.us-btn--primary { background: var(--us-key); color: #fff; border-color: var(--us-key); }
+.us-btn--primary:hover { background: var(--us-key-700); border-color: var(--us-key-700); }
+
+.us-btn--accent { background: var(--us-sub); color: var(--us-key); border-color: var(--us-sub); }
+.us-btn--accent:hover { background: var(--us-sub-600); border-color: var(--us-sub-600); }
+
+.us-btn--secondary { background: transparent; color: var(--us-key); border-color: var(--us-key); }
+.us-btn--secondary:hover { background: var(--us-key-tint); }
+
+.us-btn--ghost { background: transparent; color: var(--us-key); border-color: transparent; }
+.us-btn--ghost:hover { background: var(--us-key-tint); }
+
+.us-btn--dark { background: #fff; color: var(--us-key); border-color: #fff; }
+.us-btn--dark:hover { background: var(--us-sub-200); border-color: var(--us-sub-200); }
+
+/* The strike device — the brand's signature gesture, a line struck through */
+.us-strike {
+  position: relative;
+  display: inline-block;
+}
+.us-strike::after {
+  content: '';
+  position: absolute;
+  left: -0.04em;
+  right: -0.04em;
+  top: 54%;
+  height: 0.06em;
+  background: currentColor;
+  transform: translateY(-50%);
+}
+
+/* Reveal-on-scroll entrance */
+@keyframes us-reveal {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+.us-reveal {
+  animation: us-reveal var(--dur-slow) var(--ease-reveal) both;
+}
+@media (prefers-reduced-motion: reduce) {
+  .us-reveal {
+    animation: none;
+  }
+}
+
+/* Glitter overlay — scattered light for cinematic fields */
+.us-glitter {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background-image:
+    radial-gradient(1.5px 1.5px at 18% 28%, rgba(255, 255, 255, 0.8), transparent),
+    radial-gradient(1px 1px at 62% 55%, rgba(255, 255, 255, 0.55), transparent),
+    radial-gradient(2px 2px at 78% 32%, rgba(51, 204, 102, 0.7), transparent),
+    radial-gradient(1px 1px at 38% 72%, rgba(255, 255, 255, 0.5), transparent),
+    radial-gradient(1.5px 1.5px at 88% 68%, rgba(255, 255, 255, 0.6), transparent),
+    radial-gradient(1px 1px at 50% 22%, rgba(51, 204, 102, 0.5), transparent),
+    radial-gradient(1px 1px at 28% 50%, rgba(255, 255, 255, 0.4), transparent);
+}
